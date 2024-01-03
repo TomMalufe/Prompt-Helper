@@ -1,0 +1,41 @@
+:host {
+  max-height: 100vh;
+  max-width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: stretch;
+}
+
+$side-panel-width: 300px;
+.side-panel {
+  height: calc(100vh);
+  width: $side-panel-width;
+
+  > div {
+    &:not(:last-child) {
+      border-bottom: 1px solid black;
+    }
+    width: 100%;
+
+    > div {
+      min-height: 100px;
+      background-color: #cccccc;
+      position: relative;
+
+      button {
+        visibility: hidden;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+      }
+
+      &:hover button {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+mat-tab-group {
+  width: calc(100vw - $side-panel-width);
+}
