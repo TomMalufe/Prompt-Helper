@@ -25,18 +25,10 @@ import { clamp } from './shared/utils';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('attire', { static: true }) attire!: CategoryTabComponent;
-  @ViewChild('body', { static: true }) body!: CategoryTabComponent;
-  @ViewChild('composition', { static: true }) composition!: CategoryTabComponent;
-  @ViewChild('expression', { static: true }) expression!: CategoryTabComponent;
-  @ViewChild('face', { static: true }) face!: CategoryTabComponent;
-  @ViewChild('hair', { static: true }) hair!: CategoryTabComponent;
-  @ViewChild('pose', { static: true }) pose!: CategoryTabComponent;
-
   positivePrompts: Prompt[] = [];
   negativePrompts: Prompt[] = [];
   savedPrompts: SavedPrompts[] = [];
-  readonly LOCAL_STORAGE_NAME = 'saved_prompts';
+  readonly LOCAL_STORAGE_NAME = 'saved_prompts_v2';
 
   allPositivePrompts = () => this.positivePrompts.map((it) => it.toString()).join(', ');
   allNegativePrompts = () => this.negativePrompts.map((it) => it.toString()).join(', ');
@@ -53,13 +45,10 @@ export class AppComponent {
   }
 
   clear(): void {
-    this.attire.clear();
-    this.body.clear();
-    this.composition.clear();
-    this.expression.clear();
-    this.face.clear();
-    this.hair.clear();
-    this.pose.clear();
+    this.negativePrompts.forEach((it) => (it.emphasis = 0));
+    this.negativePrompts = [];
+    this.positivePrompts.forEach((it) => (it.emphasis = 0));
+    this.positivePrompts = [];
   }
   addRemovePrompt(prompt: Prompt, value: PromptValues): void {
     const pp = this.positivePrompts.findIndex((it) => it.value === prompt.value);
@@ -99,22 +88,8 @@ export class AppComponent {
             ...this.savedPrompts,
             {
               name: result,
-              positive: {
-                attire: this.attire.positivePrompts,
-                body: this.body.positivePrompts,
-                composition: this.composition.positivePrompts,
-                expression: this.expression.positivePrompts,
-                face: this.face.positivePrompts,
-                hair: this.hair.positivePrompts
-              },
-              negative: {
-                attire: this.attire.negativePrompts,
-                body: this.body.negativePrompts,
-                composition: this.composition.negativePrompts,
-                expression: this.expression.negativePrompts,
-                face: this.face.negativePrompts,
-                hair: this.hair.negativePrompts
-              }
+              positive: this.positivePrompts,
+              negative: this.negativePrompts
             }
           ])
         );
@@ -137,27 +112,8 @@ export class AppComponent {
           return;
         }
         this.clear();
-        // update positive prompts
-        this.attire.positivePrompts = stored.positive.attire?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.body.positivePrompts = stored.positive.body?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.composition.positivePrompts =
-          stored.positive.composition?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.expression.positivePrompts =
-          stored.positive.expression?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.face.positivePrompts = stored.positive.face?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.hair.positivePrompts = stored.positive.hair?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.pose.positivePrompts = stored.positive.pose?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-
-        // update negative prompts
-        this.attire.negativePrompts = stored.negative.attire?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.body.negativePrompts = stored.negative.body?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.composition.negativePrompts =
-          stored.negative.composition?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.expression.negativePrompts =
-          stored.negative.expression?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.face.negativePrompts = stored.negative.face?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.hair.negativePrompts = stored.negative.hair?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
-        this.pose.negativePrompts = stored.negative.pose?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
+        this.positivePrompts = stored.positive?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
+        this.negativePrompts = stored.negative?.map((it) => Prompt.create(it.value, it.emphasis)) || [];
       });
   }
   deleteSavedPrompt(name: string, select: MatSelect): void {

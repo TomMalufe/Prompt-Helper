@@ -27,12 +27,6 @@ export class CategoryTabComponent implements OnInit {
     this.defaultCategories = Object.keys(this.defaultPrompts);
   }
 
-  clear(): void {
-    this.negativePrompts.forEach((it) => (it.emphasis = 0));
-    this.negativePrompts = [];
-    this.positivePrompts.forEach((it) => (it.emphasis = 0));
-    this.positivePrompts = [];
-  }
   addRemoveDefaultPrompt(prompt: Prompt, value: PromptValues): void {
     this.updatePrompt.emit({ prompt, value });
   }
