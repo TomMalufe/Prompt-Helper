@@ -138,7 +138,7 @@ export class AppComponent {
 
   private getSavedPrompts(): void {
     const stored = window.localStorage.getItem(this.LOCAL_STORAGE_NAME);
-    if (stored && stored.length > 0 && /composition/.test(stored)) {
+    if (stored && stored.length > 0 && /positive/.test(stored)) {
       this.savedPrompts = JSON.parse(stored) as SavedPrompts[];
     } else {
       this.savedPrompts = [];
