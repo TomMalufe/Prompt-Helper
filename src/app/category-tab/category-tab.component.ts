@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { clamp, Prompt } from '../defaultPrompts';
+import { Component, Input, OnInit } from '@angular/core';
+import { Prompt } from '../shared/prompt';
+import { clamp } from '../shared/utils';
 
 @Component({
   selector: 'app-category-tab',
   templateUrl: './category-tab.component.html',
   styleUrls: ['./category-tab.component.scss']
 })
-export class CategoryTabComponent {
+export class CategoryTabComponent implements OnInit {
   @Input()
   defaultPrompts: { [group: string]: Prompt[] } = {};
 
@@ -20,6 +21,18 @@ export class CategoryTabComponent {
   public negativePrompts: Prompt[] = [];
   defaultCategories = Object.keys(this.defaultPrompts);
 
+  searchValue = '';
+
+  ngOnInit() {
+    this.defaultCategories = Object.keys(this.defaultPrompts);
+  }
+
+  clear(): void {
+    this.negativePrompts.forEach((it) => (it.emphasis = 0));
+    this.negativePrompts = [];
+    this.positivePrompts.forEach((it) => (it.emphasis = 0));
+    this.positivePrompts = [];
+  }
   emphasise(item: Prompt, inc: number): void {
     item.emphasis = clamp(item.emphasis + inc, -3, 3);
   }
@@ -51,5 +64,9 @@ export class CategoryTabComponent {
       return this.promptValues.NEGATIVE;
     }
     return this.promptValues.NONE;
+  }
+  search(prompts: Prompt[]): Prompt[] {
+    const find = new RegExp(this.searchValue, 'i');
+    return prompts.filter((it) => find.test(it.value));
   }
 }

@@ -44,32 +44,45 @@
   </mat-list>
 </div>
 
-<cdk-accordion>
-  <cdk-accordion-item
-    *ngFor="let category of defaultCategories; let index = index"
-    #accordionItem="cdkAccordionItem"
-    role="button"
-    tabindex="0"
-    [attr.id]="'accordion-header-' + index"
-    [attr.aria-expanded]="accordionItem.expanded"
-    [attr.aria-controls]="'accordion-body-' + index"
-  >
-    <div class="accordion-item-header" (click)="accordionItem.toggle()">
-      {{ category }}
-    </div>
-    <div class="accordion-item-body" role="region" [style.display]="accordionItem.expanded ? '' : 'none'">
-      <div *ngFor="let item of defaultPrompts[category]">
-        <span>{{ item.value }}</span>
-        <mat-button-toggle-group [value]="getItemList(item)" (change)="addRemoveDefaultPrompt(item, $event.value)">
-          <mat-button-toggle value="positive">
-            <span class="material-symbols-outlined">add_circle</span>
-          </mat-button-toggle>
-          <mat-button-toggle value="negative">
-            <span class="material-symbols-outlined">do_not_disturb_on</span>
-          </mat-button-toggle>
-          <mat-button-toggle value="none"><span class="material-symbols-outlined">cancel</span></mat-button-toggle>
-        </mat-button-toggle-group>
+<div>
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>Search</mat-label>
+    <input matInput type="text" [(ngModel)]="searchValue" />
+    <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue = ''">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </mat-form-field>
+  <cdk-accordion>
+    <cdk-accordion-item
+      *ngFor="let category of defaultCategories; let index = index"
+      #accordionItem="cdkAccordionItem"
+      role="button"
+      tabindex="0"
+      [attr.id]="'accordion-header-' + index"
+      [attr.aria-expanded]="accordionItem.expanded"
+      [attr.aria-controls]="'accordion-body-' + index"
+    >
+      <div class="accordion-item-header" (click)="accordionItem.toggle()">
+        {{ category }} ({{ search(defaultPrompts[category]).length }}/{{ defaultPrompts[category].length }})
       </div>
-    </div>
-  </cdk-accordion-item>
-</cdk-accordion>
+      <div
+        class="accordion-item-body"
+        role="region"
+        [style.display]="accordionItem.expanded || searchValue.length > 0 ? '' : 'none'"
+      >
+        <div *ngFor="let item of search(defaultPrompts[category])">
+          <span>{{ item.value }}</span>
+          <mat-button-toggle-group [value]="getItemList(item)" (change)="addRemoveDefaultPrompt(item, $event.value)">
+            <mat-button-toggle value="positive">
+              <span class="material-symbols-outlined">add_circle</span>
+            </mat-button-toggle>
+            <mat-button-toggle value="negative">
+              <span class="material-symbols-outlined">do_not_disturb_on</span>
+            </mat-button-toggle>
+            <mat-button-toggle value="none"><span class="material-symbols-outlined">cancel</span></mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </cdk-accordion-item>
+  </cdk-accordion>
+</div>
