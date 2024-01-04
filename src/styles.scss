@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 
 html,
 body {
@@ -7,4 +8,22 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+mat-tab-group.vertical {
+  &.mat-mdc-tab-group {
+    flex-direction: row-reverse !important;
+  }
+
+  .mat-mdc-tab-labels {
+    flex-direction: column !important;
+  }
+
+  .mat-mdc-tab-label-active {
+    border-right: 2px solid mat.get-color-from-palette(mat.$indigo-palette, 500) !important;
+  }
+
+  .mat-mdc-ink-bar {
+    display: none;
+  }
 }

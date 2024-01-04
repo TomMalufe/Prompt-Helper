@@ -1,6 +1,6 @@
 import { Prompt } from './prompt';
 
-export const DEFAULT_HAIR_PROMPTS = {
+export const DEFAULT_HAIR_PROMPTS: { [group: string]: Prompt[] } = {
   Length: [
     Prompt.create('very short hair'),
     Prompt.create('short hair'),

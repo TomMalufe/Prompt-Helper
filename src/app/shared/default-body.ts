@@ -1,6 +1,18 @@
 import { Prompt } from './prompt';
 
-export const DEFAULT_BODY_PROMPTS = {
+export const DEFAULT_BODY_PROMPTS: { [group: string]: Prompt[] } = {
+  Types: [
+    Prompt.create('giant'),
+    Prompt.create('giantess'),
+    Prompt.create('miniboy'),
+    Prompt.create('minigirl'),
+    Prompt.create('muscular'),
+    Prompt.create('muscular female'),
+    Prompt.create('plump'),
+    Prompt.create('curvy'),
+    Prompt.create('fat'),
+    Prompt.create('skinny')
+  ],
   Chest: [
     Prompt.create('flat chest'),
     Prompt.create('small breasts'),
@@ -57,8 +69,6 @@ export const DEFAULT_BODY_PROMPTS = {
     Prompt.create('obliques'),
     Prompt.create('narrow waist'),
     Prompt.create('wide hips'),
-    Prompt.create('skinny'),
-    Prompt.create('chubby'),
     Prompt.create('love handles'),
     Prompt.create('dimples of venus'),
     Prompt.create('cameltoe'),
@@ -198,5 +208,43 @@ export const DEFAULT_BODY_PROMPTS = {
     Prompt.create('Scorpion tail'),
     Prompt.create('Snake tail'),
     Prompt.create('Tadpole tail')
+  ],
+  Injuries: [
+    Prompt.create('blood'),
+    Prompt.create('bleeding'),
+    Prompt.create('blood on bandages'),
+    Prompt.create('bruise'),
+    Prompt.create('bruised eye'),
+    Prompt.create('cuts'),
+    Prompt.create('deep wound'),
+    Prompt.create('head bump'),
+    Prompt.create('missing eye'),
+    Prompt.create('nosebleed'),
+    Prompt.create('scar'),
+    Prompt.create('scratches'),
+    Prompt.create('stitches'),
+    Prompt.create('scrape'),
+    Prompt.create('sprain'),
+    Prompt.create('stab'),
+    Prompt.create('impaled'),
+    Prompt.create('severed limb'),
+    Prompt.create('amputee'),
+    Prompt.create('track marks'),
+    Prompt.create('paralysis'),
+    Prompt.create('bandaid'),
+    Prompt.create('bandaid on knee'),
+    Prompt.create('bandaid on arm'),
+    Prompt.create('bandaid on leg'),
+    Prompt.create('bandaid on face'),
+    Prompt.create('bandaid on cheek'),
+    Prompt.create('bandaid on ear'),
+    Prompt.create('bandaid on forehead'),
+    Prompt.create('bandaid on nose'),
+    Prompt.create('bandages'),
+    Prompt.create('bandage on face'),
+    Prompt.create('bandage over one eye'),
+    Prompt.create('eyepatch'),
+    Prompt.create('sarashi'),
+    Prompt.create('sling (medical)')
   ]
 };

@@ -3,7 +3,7 @@
   max-width: 100vw;
   overflow: hidden;
   display: flex;
-  justify-content: stretch;
+  justify-content: space-evenly;
 }
 
 $side-panel-width: 300px;
@@ -37,6 +37,16 @@ $side-panel-width: 300px;
   }
 }
 
-mat-tab-group {
-  width: calc(100vw - $side-panel-width);
+.container {
+  width: 400px;
+  max-width: 100%;
+  margin: 0 25px;
+  display: inline-block;
+  vertical-align: top;
+
+  mat-list-item .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }

@@ -1,6 +1,6 @@
 import { Prompt } from './prompt';
 
-export const DEFAULT_EXPRESSION_PROMPTS = {
+export const DEFAULT_EXPRESSION_PROMPTS: { [group: string]: Prompt[] } = {
   Misc: [
     Prompt.create('blinking'),
     Prompt.create('closed eyes'),

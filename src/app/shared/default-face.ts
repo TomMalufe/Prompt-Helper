@@ -1,6 +1,6 @@
 import { Prompt } from './prompt';
 
-export const DEFAULT_FACE_PROMPTS = {
+export const DEFAULT_FACE_PROMPTS: { [group: string]: Prompt[] } = {
   Ears: [
     Prompt.create('animal ears'),
     Prompt.create('bat ears'),
@@ -134,5 +134,24 @@ export const DEFAULT_FACE_PROMPTS = {
     Prompt.create('split mouth'),
     Prompt.create('wavy mouth'),
     Prompt.create('wide-eyed')
+  ],
+  Skin: [
+    Prompt.create('Freckles'),
+    Prompt.create('Dark skin'),
+    Prompt.create('Pale skin'),
+    Prompt.create('Tan'),
+    Prompt.create('Tanlines'),
+    Prompt.create('Sun tattoo'),
+    Prompt.create('Sun burnt'),
+    Prompt.create('Black skin'),
+    Prompt.create('Blue skin'),
+    Prompt.create('Green skin'),
+    Prompt.create('Grey skin'),
+    Prompt.create('Orange skin'),
+    Prompt.create('Pink skin'),
+    Prompt.create('Purple skin'),
+    Prompt.create('Red skin'),
+    Prompt.create('White skin'),
+    Prompt.create('Yellow skin')
   ]
 };

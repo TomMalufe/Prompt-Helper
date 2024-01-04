@@ -1,6 +1,6 @@
 import { Prompt } from './prompt';
 
-export const DEFAULT_ATTIRE_PROMPTS = {
+export const DEFAULT_ATTIRE_PROMPTS: { [group: string]: Prompt[] } = {
   Headwear: [
     Prompt.create('balaclava'),
     Prompt.create('baseball cap'),
