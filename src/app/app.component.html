@@ -18,6 +18,24 @@
     </div>
   </div>
   <button mat-flat-button color="accent" (click)="clear()">Clear</button>
+  <button mat-flat-button color="primary" (click)="save()">Save</button>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Load...</mat-label>
+    <mat-select #loadSelect (valueChange)="load($event, loadSelect)">
+      <mat-option *ngFor="let savedPrompt of savedPrompts" [value]="savedPrompt.name">
+        {{ savedPrompt.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Delete...</mat-label>
+    <mat-select #deleteSelect (valueChange)="deleteSavedPrompt($event, deleteSelect)">
+      <mat-option *ngFor="let savedPrompt of savedPrompts" [value]="savedPrompt.name">
+        {{ savedPrompt.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <div class="mat-caption">
     <p>

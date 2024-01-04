@@ -1,6 +1,8 @@
 export class Prompt {
-  public emphasis: number = 0;
-  constructor(public value: string) {}
+  constructor(
+    public value: string,
+    public emphasis: number = 0
+  ) {}
   toString(): string {
     if (this.emphasis > 0) {
       return '('.repeat(this.emphasis) + this.value + ')'.repeat(this.emphasis);
@@ -10,7 +12,7 @@ export class Prompt {
     }
     return this.value;
   }
-  static create(value: string): Prompt {
-    return new Prompt(value);
+  static create(value: string, emphasis: number = 0): Prompt {
+    return new Prompt(value, emphasis);
   }
 }
