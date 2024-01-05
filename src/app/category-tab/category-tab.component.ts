@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Prompt } from '../shared/prompt';
-import { PromptValues } from '../shared/PromptValues';
+import { PromptValuesEnum } from '../shared/prompt-values-enum';
 import { clamp } from '../shared/utils';
 
 @Component({
@@ -19,7 +19,7 @@ export class CategoryTabComponent implements OnInit {
   negativePrompts: Prompt[] = [];
 
   @Output()
-  updatePrompt = new EventEmitter<{ prompt: Prompt; value: PromptValues }>();
+  updatePrompt = new EventEmitter<{ prompt: Prompt; value: PromptValuesEnum }>();
 
   searchValue = '';
 
@@ -27,17 +27,17 @@ export class CategoryTabComponent implements OnInit {
     this.defaultCategories = Object.keys(this.defaultPrompts);
   }
 
-  addRemoveDefaultPrompt(prompt: Prompt, value: PromptValues): void {
+  addRemoveDefaultPrompt(prompt: Prompt, value: PromptValuesEnum): void {
     this.updatePrompt.emit({ prompt, value });
   }
   getItemList(item: Prompt): string {
     if (this.positivePrompts.includes(item)) {
-      return PromptValues.POSITIVE;
+      return PromptValuesEnum.POSITIVE;
     }
     if (this.negativePrompts.includes(item)) {
-      return PromptValues.NEGATIVE;
+      return PromptValuesEnum.NEGATIVE;
     }
-    return PromptValues.NONE;
+    return PromptValuesEnum.NONE;
   }
   search(prompts: Prompt[]): Prompt[] {
     const find = new RegExp(this.searchValue, 'i');

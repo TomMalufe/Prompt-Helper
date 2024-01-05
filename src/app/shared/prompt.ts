@@ -1,6 +1,7 @@
 export class Prompt {
   constructor(
     public value: string,
+    public isNegative: boolean = false,
     public emphasis: number = 0
   ) {}
   toString(): string {
@@ -12,7 +13,7 @@ export class Prompt {
     }
     return this.value;
   }
-  static create(value: string, emphasis: number = 0): Prompt {
-    return new Prompt(value, emphasis);
+  static create(value: string, isNegative: boolean = false, emphasis: number = 0): Prompt {
+    return new Prompt(value, isNegative, emphasis);
   }
 }

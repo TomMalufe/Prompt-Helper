@@ -15,7 +15,7 @@ import {
   DEFAULT_POSE_PROMPTS
 } from './shared/defaultsIndex';
 import { Prompt } from './shared/prompt';
-import { PromptValues } from './shared/PromptValues';
+import { PromptValuesEnum } from './shared/prompt-values-enum';
 import { SavedPrompts } from './shared/saved-prompts';
 import { clamp } from './shared/utils';
 
@@ -50,7 +50,7 @@ export class AppComponent {
     this.positivePrompts.forEach((it) => (it.emphasis = 0));
     this.positivePrompts = [];
   }
-  addRemovePrompt(prompt: Prompt, value: PromptValues): void {
+  addRemovePrompt(prompt: Prompt, value: PromptValuesEnum): void {
     const pp = this.positivePrompts.findIndex((it) => it.value === prompt.value);
     if (pp >= 0) {
       this.positivePrompts.splice(pp, 1);
@@ -60,13 +60,13 @@ export class AppComponent {
       this.negativePrompts.splice(pp, 1);
     }
 
-    if (value === PromptValues.POSITIVE) {
+    if (value === PromptValuesEnum.POSITIVE) {
       this.positivePrompts.push(prompt);
     }
-    if (value === PromptValues.NEGATIVE) {
+    if (value === PromptValuesEnum.NEGATIVE) {
       this.negativePrompts.push(prompt);
     }
-    if (value === PromptValues.NONE) {
+    if (value === PromptValuesEnum.NONE) {
       prompt.emphasis = 0;
     }
   }
@@ -145,5 +145,5 @@ export class AppComponent {
     }
   }
 
-  protected readonly PromptValues = PromptValues;
+  protected readonly PromptValues = PromptValuesEnum;
 }

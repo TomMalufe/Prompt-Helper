@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CategoryTabComponent } from './category-tab/category-tab.component';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { StoreModule } from '@ngrx/store';
+import { storageMetareducer } from './store/storage.metareducer';
 
 @NgModule({
   declarations: [AppComponent, CategoryTabComponent, SaveDialogComponent, ConfirmationDialogComponent],
@@ -31,7 +33,13 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MatInputModule,
     FormsModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    StoreModule.forRoot(
+      {},
+      {
+        metaReducers: [storageMetareducer]
+      }
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
