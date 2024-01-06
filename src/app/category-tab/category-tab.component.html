@@ -24,8 +24,8 @@
       [style.display]="accordionItem.expanded || searchValue.length > 0 ? '' : 'none'"
     >
       <div *ngFor="let item of search(defaultPrompts[category])">
-        <span>{{ item.value }}</span>
-        <mat-button-toggle-group [value]="getItemList(item)" (change)="addRemoveDefaultPrompt(item, $event.value)">
+        <span>{{ item }}</span>
+        <mat-button-toggle-group [value]="getItemList(item, (prompt$ | async) || [])" (change)="addRemoveDefaultPrompt(item, $event.value)">
           <mat-button-toggle value="positive">
             <span class="material-symbols-outlined">add_circle</span>
           </mat-button-toggle>

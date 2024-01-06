@@ -2,19 +2,19 @@
   <div>
     <h3>Prompt</h3>
     <div>
-      <button mat-icon-button [cdkCopyToClipboard]="allPositivePrompts()">
+      <button mat-icon-button [cdkCopyToClipboard]="promptToString((positivePrompts$ | async) || [])">
         <span class="material-symbols-outlined">content_copy</span>
       </button>
-      {{ allPositivePrompts() }}
+      {{ promptToString((positivePrompts$ | async) || []) }}
     </div>
   </div>
   <div>
     <h3>Negative Prompt</h3>
     <div>
-      <button mat-icon-button [cdkCopyToClipboard]="allNegativePrompts()">
+      <button mat-icon-button [cdkCopyToClipboard]="promptToString((negativePrompts$ | async) || [])">
         <span class="material-symbols-outlined">content_copy</span>
       </button>
-      {{ allNegativePrompts() }}
+      {{ promptToString((negativePrompts$ | async) || []) }}
     </div>
   </div>
   <button mat-flat-button color="accent" (click)="clear()">Clear</button>
@@ -23,16 +23,16 @@
   <mat-form-field appearance="fill">
     <mat-label>Load...</mat-label>
     <mat-select #loadSelect (valueChange)="load($event, loadSelect)">
-      <mat-option *ngFor="let savedPrompt of savedPrompts" [value]="savedPrompt.name">
-        {{ savedPrompt.name }}
+      <mat-option *ngFor="let savedPrompt of (savedPrompts$ | async) || []" [value]="savedPrompt">
+        {{ savedPrompt }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Delete...</mat-label>
     <mat-select #deleteSelect (valueChange)="deleteSavedPrompt($event, deleteSelect)">
-      <mat-option *ngFor="let savedPrompt of savedPrompts" [value]="savedPrompt.name">
-        {{ savedPrompt.name }}
+      <mat-option *ngFor="let savedPrompt of (savedPrompts$ | async) || []" [value]="savedPrompt">
+        {{ savedPrompt }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -54,9 +54,9 @@
   <h2>Positive Prompts</h2>
 
   <mat-list>
-    <mat-list-item *ngFor="let item of positivePrompts">
+    <mat-list-item *ngFor="let item of positivePrompts$ | async">
       <div class="content">
-        <div>{{ item.toString() }}</div>
+        <div>{{ promptTagToString(item) }}</div>
         <div>
           <button mat-icon-button (click)="emphasise(item, -1)">
             <span class="material-symbols-outlined">do_not_disturb_on</span>
@@ -64,7 +64,7 @@
           <button mat-icon-button (click)="emphasise(item, 1)">
             <span class="material-symbols-outlined">add_circle</span>
           </button>
-          <button mat-icon-button (click)="addRemovePrompt(item, PromptValues.NONE)">
+          <button mat-icon-button (click)="removePrompt(item)">
             <span class="material-symbols-outlined">cancel</span>
           </button>
         </div>
@@ -77,7 +77,7 @@
   <h2>Negative Prompts</h2>
 
   <mat-list>
-    <mat-list-item *ngFor="let item of negativePrompts">
+    <mat-list-item *ngFor="let item of negativePrompts$ | async">
       <div class="content">
         <div>{{ item.toString() }}</div>
         <div>
@@ -87,7 +87,7 @@
           <button mat-icon-button (click)="emphasise(item, 1)">
             <span class="material-symbols-outlined">add_circle</span>
           </button>
-          <button mat-icon-button (click)="addRemovePrompt(item, PromptValues.NONE)">
+          <button mat-icon-button (click)="removePrompt(item)">
             <span class="material-symbols-outlined">cancel</span>
           </button>
         </div>
@@ -98,59 +98,24 @@
 
 <mat-tab-group class="vertical">
   <mat-tab label="Image Composition">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_COMPOSITION_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_COMPOSITION_PROMPTS" category="Image Composition"></app-category-tab>
   </mat-tab>
   <mat-tab label="Face">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_FACE_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_FACE_PROMPTS" category="Face"></app-category-tab>
   </mat-tab>
   <mat-tab label="Hair">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_HAIR_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_HAIR_PROMPTS" category="Hair"></app-category-tab>
   </mat-tab>
   <mat-tab label="Body">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_BODY_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_BODY_PROMPTS" category="Body"></app-category-tab>
   </mat-tab>
   <mat-tab label="Expression">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_EXPRESSION_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_EXPRESSION_PROMPTS" category="Expression"></app-category-tab>
   </mat-tab>
   <mat-tab label="Pose">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_POSE_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_POSE_PROMPTS" category="Pose"></app-category-tab>
   </mat-tab>
   <mat-tab label="Attire">
-    <app-category-tab
-      [defaultPrompts]="DEFAULT_ATTIRE_PROMPTS"
-      [positivePrompts]="positivePrompts"
-      [negativePrompts]="negativePrompts"
-      (updatePrompt)="addRemovePrompt($event.prompt, $event.value)"
-    ></app-category-tab>
+    <app-category-tab [defaultPrompts]="DEFAULT_ATTIRE_PROMPTS" category="Attire"></app-category-tab>
   </mat-tab>
 </mat-tab-group>

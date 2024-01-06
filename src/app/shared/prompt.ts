@@ -1,19 +1,5 @@
-export class Prompt {
-  constructor(
-    public value: string,
-    public isNegative: boolean = false,
-    public emphasis: number = 0
-  ) {}
-  toString(): string {
-    if (this.emphasis > 0) {
-      return '('.repeat(this.emphasis) + this.value + ')'.repeat(this.emphasis);
-    }
-    if (this.emphasis < 0) {
-      return '['.repeat(-1 * this.emphasis) + this.value + ']'.repeat(-1 * this.emphasis);
-    }
-    return this.value;
-  }
-  static create(value: string, isNegative: boolean = false, emphasis: number = 0): Prompt {
-    return new Prompt(value, isNegative, emphasis);
-  }
+export interface PromptTag {
+  value: string,
+  isNegative: boolean,
+  emphasis: number
 }

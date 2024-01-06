@@ -1,26 +1,29 @@
-import { ActionReducer, Action } from '@ngrx/store';
-import { merge, pick } from 'lodash-es';
+import { ActionReducer, Action, MetaReducer } from '@ngrx/store';
 import { initialState } from './reducer';
+import { pick, merge } from 'lodash';
+import { AppState } from '../app.module';
 
 function setSavedState(state: any, localStorageKey: string) {
-  localStorage.setItem(localStorageKey, JSON.stringify(state));
+  window.localStorage.setItem(localStorageKey, JSON.stringify(state));
 }
 function getSavedState(localStorageKey: string): any {
-  const stored = localStorage.getItem(localStorageKey);
+  const stored = window.localStorage.getItem(localStorageKey);
   if (stored) {
     return JSON.parse(stored);
   }
-  return initialState;
+  return {app: initialState};
 }
 
-// the keys from state which we'd like to save.
-const stateKeys = ['layout.theme'];
-// the key for the local storage.
-const localStorageKey = '__prompt_helper_storage__';
 
-export function storageMetareducer<S, A extends Action = Action>(reducer: ActionReducer<S, A>) {
+// the keys from state which we'd like to save.
+const stateKeys = ['app.prompt', 'app.savedPrompts', 'app.hiddenTags', 'app.customTags'];
+// the key for the local storage.
+const localStorageKey = 'prompt_helper_storage';
+
+export function storageMetareducer(reducer: ActionReducer<AppState, Action>) {
   let onInit = true; // after load/refresh…
-  return function (state: S, action: A): S {
+  return function (state: AppState, action: Action): AppState {
+    console.log(action.type);
     // reduce the nextState.
     const nextState = reducer(state, action);
     // init the application state.
@@ -35,3 +38,5 @@ export function storageMetareducer<S, A extends Action = Action>(reducer: Action
     return nextState;
   };
 }
+ 
+export const metaReducers: MetaReducer<any>[] = [storageMetareducer];

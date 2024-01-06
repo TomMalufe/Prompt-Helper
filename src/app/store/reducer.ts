@@ -1,13 +1,13 @@
-import { createReducer, on } from '@ngrx/store';
-import { Prompt } from '../shared/prompt';
+import { ActionReducer, createReducer, on } from '@ngrx/store';
 import { Tag } from '../shared/tag';
 import { Actions } from './actions';
+import { PromptTag } from '../shared/prompt';
 
-interface StoreState {
-  prompt: Prompt[];
+export interface StoreState {
+  prompt: PromptTag[];
   savedPrompts: {
     name: string;
-    prompt: Prompt[];
+    prompt: PromptTag[];
   }[];
   customTags: Tag[];
   hiddenTags: Tag[];
@@ -20,7 +20,7 @@ export const initialState: StoreState = {
   hiddenTags: []
 };
 
-export const appReducer = createReducer(
+export const appReducer = createReducer<StoreState, any, ActionReducer<StoreState, any>>(
   initialState,
   on(Actions.addTag, (state, tag) => ({
     ...state,
@@ -36,25 +36,41 @@ export const appReducer = createReducer(
     }
     return { ...state, hiddenTags: [...state.hiddenTags, tag] };
   }),
-  on(Actions.restoreTag, (state, tag) => {
-    const index = state.hiddenTags.findIndex(
-      (it) => it.value === tag.value && it.category === tag.category && it.subCategory === tag.subCategory
-    );
-    if (index >= 0) {
-      state.hiddenTags.splice(index, 1);
-    }
-    return { ...state };
-  }),
+  on(Actions.restoreTag, (state, tag) => ({
+    ...state,
+    hiddenTags: state.hiddenTags.filter(
+      (it) => !(it.value === tag.value && it.category === tag.category && it.subCategory === tag.subCategory)
+    )
+  })),
 
   on(Actions.addToPrompt, (state, { value, isNegative }) => ({
     ...state,
-    prompt: [...state.prompt, Prompt.create(value, isNegative)]
+    prompt: [...state.prompt, { value, isNegative, emphasis: 0 }]
   })),
-  on(Actions.removeFromPrompt, (state) => ({ ...state, customTags: [] })),
+  on(Actions.removeFromPrompt, (state, { value }) => ({
+    ...state,
+    prompt: state.prompt.filter((it) => it.value !== value)
+  })),
+  on(Actions.clearPrompt, (state) => ({ ...state, prompt: [] })),
 
-  on(Actions.updateTagEmphasis, (state) => ({ ...state, customTags: [] })),
+  on(Actions.updateTagEmphasis, (state, tag) => ({
+    ...state,
+    prompt: state.prompt.map((it) => (it.value === tag.value ? tag : it))
+  })),
 
-  on(Actions.savePrompt, (state) => ({ ...state, customTags: [] })),
-  on(Actions.loadPrompt, (state) => ({ ...state, customTags: [] })),
-  on(Actions.deleteSavedPrompt, (state) => ({ ...state, customTags: [] }))
+  on(Actions.savePrompt, (state, { name }) => ({
+    ...state,
+    savedPrompts:
+      state.savedPrompts.findIndex((it) => it.name === name) < 0
+        ? [...state.savedPrompts, { name, prompt: state.prompt }]
+        : state.savedPrompts.map((it) => (it.name === name ? { name, prompt: state.prompt } : it))
+  })),
+  on(Actions.loadPrompt, (state, { name }) => ({
+    ...state,
+    prompt: state.savedPrompts.find((it) => it.name === name)?.prompt || state.prompt
+  })),
+  on(Actions.deleteSavedPrompt, (state, { name }) => ({
+    ...state,
+    savedPrompts: state.savedPrompts.filter((it) => it.name !== name)
+  }))
 );
