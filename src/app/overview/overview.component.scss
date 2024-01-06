@@ -1,0 +1,23 @@
+:host {
+  height: calc(100vh - 64px);
+  
+  > div {
+    &:not(:last-child) {
+      border-bottom: 1px solid black;
+    }
+    width: 100%;
+  
+    > div {
+      min-height: 100px;
+      background-color: #cccccc;
+      position: relative;
+      padding: 6px 36px 6px 6px;
+  
+      button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+      }
+    }
+  }
+}

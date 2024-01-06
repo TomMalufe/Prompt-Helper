@@ -1,52 +1,21 @@
 :host {
-  max-height: 100vh;
-  max-width: 100vw;
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
-  display: flex;
-  justify-content: space-evenly;
-}
 
-$side-panel-width: 300px;
-.side-panel {
-  height: calc(100vh);
-  width: $side-panel-width;
-
-  > div {
-    &:not(:last-child) {
-      border-bottom: 1px solid black;
+  mat-drawer {
+    mat-list-item.grouping {
+      background-color: #3f51b5;
+      color: white;
+      font-weight: bold;
     }
-    width: 100%;
 
-    > div {
-      min-height: 100px;
-      background-color: #cccccc;
-      position: relative;
-      padding: 6px;
-
-      button {
-        visibility: hidden;
-        position: absolute;
-        top: 8px;
-        right: 8px;
-      }
-
-      &:hover button {
-        visibility: visible;
-      }
+    .active-link {
+      background-color: lightgray;
     }
   }
-}
 
-.container {
-  width: 400px;
-  max-width: 100%;
-  margin: 0 25px;
-  display: inline-block;
-  vertical-align: top;
-
-  mat-list-item .content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  mat-drawer-container {
+    height: calc(100vh - 64px);
   }
 }

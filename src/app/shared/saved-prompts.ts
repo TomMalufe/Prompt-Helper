@@ -1,7 +1,6 @@
-import { Prompt } from './prompt';
+import { PromptTag } from './prompt';
 
 export interface SavedPrompts {
   name: string;
-  positive: Prompt[];
-  negative: Prompt[];
+  prompt: PromptTag[];
 }

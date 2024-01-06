@@ -1,0 +1,28 @@
+:host {
+  height: calc(100vh - 64px);
+}
+
+h2 {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.container {
+  width: 100%;
+  mat-list-item .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > div:first-child {
+      max-width: calc(100% - 144px);
+    }
+
+    .tag-actions {
+      display: flex;
+      > div {
+        margin-left: 6px;
+      }
+    }
+  }
+}

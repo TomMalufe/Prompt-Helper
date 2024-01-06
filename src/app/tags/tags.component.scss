@@ -1,7 +1,11 @@
+:host {
+  height: calc(100vh - 64px);
+}
+
 cdk-accordion {
   display: block;
-  width: 350px;
-  height: calc(100vh - 104px);
+  width: 100%;
+  height: calc(100vh - 120px);
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -39,6 +43,10 @@ cdk-accordion {
       justify-content: space-between;
       align-items: center;
       padding-left: 8px;
+
+      > span {
+        max-width: calc(100% - 150px);
+      }
     }
   }
 }
