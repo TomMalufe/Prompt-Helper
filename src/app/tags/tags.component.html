@@ -7,7 +7,7 @@
 </mat-form-field>
 <cdk-accordion>
   <cdk-accordion-item
-    *ngFor="let category of defaultCategories; let index = index"
+    *ngFor="let category of subCategories; let index = index"
     #accordionItem="cdkAccordionItem"
     role="button"
     tabindex="0"
@@ -16,14 +16,14 @@
     [attr.aria-controls]="'accordion-body-' + index"
   >
     <div class="accordion-item-header" (click)="accordionItem.toggle()">
-      {{ category }} ({{ search(defaultPrompts[category]).length }}/{{ defaultPrompts[category].length }})
+      {{ category }} ({{ search(tags[category]).length }}/{{ tags[category].length }})
     </div>
     <div
       class="accordion-item-body"
       role="region"
       [style.display]="accordionItem.expanded || searchValue.length > 0 ? '' : 'none'"
     >
-      <div *ngFor="let item of search(defaultPrompts[category])">
+      <div *ngFor="let item of search(tags[category])">
         <span>{{ item }}</span>
         <mat-button-toggle-group [value]="getItemList(item, (prompt$ | async) || [])" (change)="addRemoveDefaultPrompt(item, $event.value)">
           <mat-button-toggle value="positive">

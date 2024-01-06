@@ -1,30 +1,42 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PromptTag } from '../shared/prompt';
 import { PromptValuesEnum } from '../shared/prompt-values-enum';
 import { Store, select } from '@ngrx/store';
 import { selectPrompt } from '../store/selectors';
 import { Actions } from '../store/actions';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { Categories, DEFAULT_TAGS } from '../shared/defaultsIndex';
 
 @Component({
-  selector: 'app-category-tab',
-  templateUrl: './category-tab.component.html',
-  styleUrls: ['./category-tab.component.scss']
+  selector: 'app-tags',
+  templateUrl: './tags.component.html',
+  styleUrls: ['./tags.component.scss']
 })
-export class CategoryTabComponent implements OnInit {
-  @Input()
-  category: string = 'default';
-  @Input()
-  defaultPrompts: { [group: string]: string[] } = {};
-  defaultCategories = Object.keys(this.defaultPrompts);
+export class TagsComponent implements OnDestroy {
+  private onDestroy$ = new Subject<void>();
 
   prompt$ = this.store.pipe<PromptTag[]>(select(selectPrompt));
 
+  selectedCategory: Categories = 'composition';
+  subCategories: string[] = [];
+
+  get tags(): {[group: string]: string[]} {
+    return DEFAULT_TAGS[this.selectedCategory];
+  }
+
   searchValue = '';
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private route: ActivatedRoute) {
+    route.paramMap.pipe(takeUntil(this.onDestroy$)).subscribe(paramMap => {
+      this.selectedCategory = paramMap.get('category') as Categories || 'composition';
+      this.subCategories = Object.keys(this.tags);
+    });
+  }
 
-  ngOnInit() {
-    this.defaultCategories = Object.keys(this.defaultPrompts);
+  ngOnDestroy() {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 
   addRemoveDefaultPrompt(tag: string, value: PromptValuesEnum): void {

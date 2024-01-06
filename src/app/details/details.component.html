@@ -1,0 +1,46 @@
+
+<div class="container">
+  <h2>Positive Prompts</h2>
+
+  <mat-list>
+    <mat-list-item *ngFor="let item of positivePrompts$ | async">
+      <div class="content">
+        <div>{{ promptTagToString(item) }}</div>
+        <div class="tag-actions">
+          <div (click)="emphasise(item, 1)">
+            <span class="material-symbols-outlined">add_circle</span>
+          </div>
+          <div (click)="emphasise(item, -1)">
+            <span class="material-symbols-outlined">do_not_disturb_on</span>
+          </div>
+          <div (click)="removePrompt(item)">
+            <span class="material-symbols-outlined">cancel</span>
+          </div>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+
+<div class="container">
+  <h2>Negative Prompts</h2>
+
+  <mat-list>
+    <mat-list-item *ngFor="let item of negativePrompts$ | async">
+      <div class="content">
+        <div>{{ promptTagToString(item) }}</div>
+        <div class="tag-actions">
+          <div (click)="emphasise(item, 1)">
+            <span class="material-symbols-outlined">add_circle</span>
+          </div>
+          <div (click)="emphasise(item, -1)">
+            <span class="material-symbols-outlined">do_not_disturb_on</span>
+          </div>
+          <div (click)="removePrompt(item)">
+            <span class="material-symbols-outlined">cancel</span>
+          </div>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

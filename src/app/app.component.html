@@ -1,121 +1,25 @@
-<div class="side-panel">
-  <div>
-    <h3>Prompt</h3>
-    <div>
-      <button mat-icon-button [cdkCopyToClipboard]="promptToString((positivePrompts$ | async) || [])">
-        <span class="material-symbols-outlined">content_copy</span>
-      </button>
-      {{ promptToString((positivePrompts$ | async) || []) }}
-    </div>
-  </div>
-  <div>
-    <h3>Negative Prompt</h3>
-    <div>
-      <button mat-icon-button [cdkCopyToClipboard]="promptToString((negativePrompts$ | async) || [])">
-        <span class="material-symbols-outlined">content_copy</span>
-      </button>
-      {{ promptToString((negativePrompts$ | async) || []) }}
-    </div>
-  </div>
-  <button mat-flat-button color="accent" (click)="clear()">Clear</button>
-  <button mat-flat-button color="primary" (click)="save()">Save</button>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+  <h1>Prompt Helper</h1>
+</mat-toolbar>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Load...</mat-label>
-    <mat-select #loadSelect (valueChange)="load($event, loadSelect)">
-      <mat-option *ngFor="let savedPrompt of (savedPrompts$ | async) || []" [value]="savedPrompt">
-        {{ savedPrompt }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Delete...</mat-label>
-    <mat-select #deleteSelect (valueChange)="deleteSavedPrompt($event, deleteSelect)">
-      <mat-option *ngFor="let savedPrompt of (savedPrompts$ | async) || []" [value]="savedPrompt">
-        {{ savedPrompt }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" #sidenav>
+    <mat-list>
+      <a mat-list-item routerLink="overview" routerLinkActive="active-link">Overview</a>
+      <a mat-list-item routerLink="details" routerLinkActive="active-link">Details</a>
+      <mat-list-item class="grouping">Tag Categories</mat-list-item>
+      <a mat-list-item routerLink="tags/composition" routerLinkActive="active-link">Composition</a>
+      <a mat-list-item routerLink="tags/face" routerLinkActive="active-link">Face</a>
+      <a mat-list-item routerLink="tags/hair" routerLinkActive="active-link">Hair</a>
+      <a mat-list-item routerLink="tags/body" routerLinkActive="active-link">Body</a>
+      <a mat-list-item routerLink="tags/attire" routerLinkActive="active-link">Attire</a>
+      <a mat-list-item routerLink="tags/expression" routerLinkActive="active-link">Expression</a>
+      <a mat-list-item routerLink="tags/pose" routerLinkActive="active-link">Pose</a>
+     </mat-list>
+  </mat-drawer>
+  <router-outlet></router-outlet>
+</mat-drawer-container>
 
-  <div class="mat-caption">
-    <p>
-      All tags and categories come from
-      <a href="https://danbooru.donmai.us/wiki_pages/tag_groups" target="_blank">this wiki</a>. There are many more tags
-      to explore there so feel free to check it out. I only wanted to include a sampling of what I felt were relevant
-      tags for AI character generation
-    </p>
-    <p>
-      Found a bug or have a suggestion on how to make this more useful?
-      <a href="https://github.com/TomMalufe/Prompt-Helper/issues" target="_blank">Leave feedback here.</a>
-    </p>
-  </div>
-</div>
-<div class="container">
-  <h2>Positive Prompts</h2>
-
-  <mat-list>
-    <mat-list-item *ngFor="let item of positivePrompts$ | async">
-      <div class="content">
-        <div>{{ promptTagToString(item) }}</div>
-        <div>
-          <button mat-icon-button (click)="emphasise(item, -1)">
-            <span class="material-symbols-outlined">do_not_disturb_on</span>
-          </button>
-          <button mat-icon-button (click)="emphasise(item, 1)">
-            <span class="material-symbols-outlined">add_circle</span>
-          </button>
-          <button mat-icon-button (click)="removePrompt(item)">
-            <span class="material-symbols-outlined">cancel</span>
-          </button>
-        </div>
-      </div>
-    </mat-list-item>
-  </mat-list>
-</div>
-
-<div class="container">
-  <h2>Negative Prompts</h2>
-
-  <mat-list>
-    <mat-list-item *ngFor="let item of negativePrompts$ | async">
-      <div class="content">
-        <div>{{ item.toString() }}</div>
-        <div>
-          <button mat-icon-button (click)="emphasise(item, -1)">
-            <span class="material-symbols-outlined">do_not_disturb_on</span>
-          </button>
-          <button mat-icon-button (click)="emphasise(item, 1)">
-            <span class="material-symbols-outlined">add_circle</span>
-          </button>
-          <button mat-icon-button (click)="removePrompt(item)">
-            <span class="material-symbols-outlined">cancel</span>
-          </button>
-        </div>
-      </div>
-    </mat-list-item>
-  </mat-list>
-</div>
-
-<mat-tab-group class="vertical">
-  <mat-tab label="Image Composition">
-    <app-category-tab [defaultPrompts]="DEFAULT_COMPOSITION_PROMPTS" category="Image Composition"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Face">
-    <app-category-tab [defaultPrompts]="DEFAULT_FACE_PROMPTS" category="Face"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Hair">
-    <app-category-tab [defaultPrompts]="DEFAULT_HAIR_PROMPTS" category="Hair"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Body">
-    <app-category-tab [defaultPrompts]="DEFAULT_BODY_PROMPTS" category="Body"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Expression">
-    <app-category-tab [defaultPrompts]="DEFAULT_EXPRESSION_PROMPTS" category="Expression"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Pose">
-    <app-category-tab [defaultPrompts]="DEFAULT_POSE_PROMPTS" category="Pose"></app-category-tab>
-  </mat-tab>
-  <mat-tab label="Attire">
-    <app-category-tab [defaultPrompts]="DEFAULT_ATTIRE_PROMPTS" category="Attire"></app-category-tab>
-  </mat-tab>
-</mat-tab-group>
